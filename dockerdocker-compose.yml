@@ -1,0 +1,27 @@
+version: "3.9"
+services:
+  python:
+    build:
+      dockerfile: Dockerfile
+    container_name: python
+    tty: true
+    volumes:
+      - ./:/app
+    working_dir: /app
+    depends_on:
+      - postgresql
+    environment:
+      - DATABASE_URL=postgres://docker:docker@postgresql:5432/sampledb?sslmode=disable
+
+  postgresql:
+    container_name: postgresql
+    build: ./postgresql
+    restart: always
+    environment:
+      - POSTGRES_USER=docker
+      - POSTGRES_PASSWORD=docker
+      - POSTGRES_DB=sampledb
+    volumes:
+      - ./postgresql/init:/docker-entrypoint-initdb.d
+    ports:
+      - 15432:5432
