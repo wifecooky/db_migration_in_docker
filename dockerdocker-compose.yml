@@ -11,16 +11,19 @@ services:
     depends_on:
       - postgresql
     environment:
-      - DATABASE_URL=postgres://docker:docker@postgresql:5432/sampledb?sslmode=disable
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+      - POSTGRES_DB
+      - DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgresql:5432/${POSTGRES_DB}?sslmode=disable
 
   postgresql:
     container_name: postgresql
     build: ./postgresql
     restart: always
     environment:
-      - POSTGRES_USER=docker
-      - POSTGRES_PASSWORD=docker
-      - POSTGRES_DB=sampledb
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+      - POSTGRES_DB
     volumes:
       - ./postgresql/init:/docker-entrypoint-initdb.d
     ports:
